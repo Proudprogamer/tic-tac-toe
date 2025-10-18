@@ -5,35 +5,59 @@ class Board {
     char[][] board;
     int count;
 
-    Board(){
+    final String RESET = "\u001B[0m";
+    final String BLUE = "\u001B[34m";
+    final String RED = "\u001B[31m";
+    final String GREEN = "\u001B[32m";
+    final String CYAN = "\u001B[36m";
+    final String YELLOW = "\u001B[33m";
+    final String MAGENTA = "\u001B[35m";
+    final String BOLD = "\u001B[1m";
+
+    Board() {
         board = new char[3][3];
-        count=0;
-        for(char[] row:board)
+        count = 0;
+        for (char[] row : board)
             Arrays.fill(row, '-');
     }
 
-    void printBoard(){
-        System.out.println("+-----------------------+");
-        for(int i=0;i<3;i++)
-        {
-            String s = "|   ";
-            for(int j=0;j<3;j++)
-                s+=board[i][j]+"   |   ";
+    void printBoard() {
+        System.out.println(CYAN + BOLD + "\n+--------- TIC TAC TOE BOARD ---------+" + RESET);
+        System.out.println(MAGENTA + BOLD + "      1       2       3" + RESET);
+        System.out.println(MAGENTA + "+-------------------------+" + RESET);
+        for (int i = 0; i < 3; i++) {
+            System.out.print(MAGENTA + (i + 1) + " " + RESET);
             System.out.println("|       |       |       |");
-            System.out.println(s);
-            System.out.println("|       |       |       |");
-            System.out.println("+-----------------------+");
+            for (int j = 0; j < 3; j++) {
+                char cell = board[i][j];
+                String color;
+
+                if (cell == 'X')
+                    color = RED + BOLD;
+                else if (cell == 'O')
+                    color = GREEN + BOLD;
+                else
+                    color = BLUE;
+
+                if(j==2)
+                    System.out.print("  |   " + color + cell + RESET + "   ");
+                else
+                    System.out.print("  |   " + color + cell + RESET + " ");
+
+            }
+            System.out.println("|");
+            System.out.println("  |       |       |       |");
+            System.out.println(MAGENTA + "+-------------------------+" + RESET);
         }
+        System.out.println();
     }
 
-    int place(int x, int y, char symbol){
-        if(count<9)
-        {
-            if(board[x][y]=='-')
-            {
+    int place(int x, int y, char symbol) {
+        if (count < 9) {
+            if (board[x][y] == '-') {
                 board[x][y] = symbol;
                 count++;
-                if(count==9)
+                if (count == 9)
                     return -1;
                 return 1;
             }
@@ -42,63 +66,20 @@ class Board {
         return -1;
     }
 
-    boolean checkWin(char symbol){
-        int consec=0;
-
-        //row
-        for(int i=0;i<3;i++)
-        {
-            for(int j=0;j<3;j++)
-            {
-                if(board[i][j]==symbol)
-                    consec++;
-            }
-            if(consec==3)
+    boolean checkWin(char symbol) {
+        for (int i = 0; i < 3; i++)
+            if (board[i][0] == symbol && board[i][1] == symbol && board[i][2] == symbol)
                 return true;
-            consec=0;
-        }
 
-        consec=0;
-        //column
-        for(int j=0;j<3;j++)
-        {
-            for(int i=0;i<3;i++)
-            {
-                if(board[i][j]==symbol)
-                    consec++;
-            }
-            if(consec==3)
+        for (int j = 0; j < 3; j++)
+            if (board[0][j] == symbol && board[1][j] == symbol && board[2][j] == symbol)
                 return true;
-            consec=0;
-        }
 
-        consec=0;
-        //p-diag
-        int i=0, j=0;
-        while(i<3 && j<3)
-        {
-            if(board[i][j]==symbol)
-                consec++;
-            i++;
-            j++;
-        }
-        if(consec==3)
+        if (board[0][0] == symbol && board[1][1] == symbol && board[2][2] == symbol)
+            return true;
+        if (board[0][2] == symbol && board[1][1] == symbol && board[2][0] == symbol)
             return true;
 
-
-        consec=0;
-        //diag
-        i=0;
-        j=2;
-        while(i<3 && j>=0)
-        {
-            if(board[i][j]==symbol)
-                consec++;
-            i++;
-            j--;
-        }
-        if(consec==3)
-            return true;
         return false;
     }
 }
