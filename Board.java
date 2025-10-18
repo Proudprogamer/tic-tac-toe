@@ -53,6 +53,9 @@ class Board {
     }
 
     int place(int x, int y, char symbol) {
+        // so what we're doing here is, we check if there are any empty slots in the board or not
+        //if yes, we place the symbol, and increment count
+        //if the slot already has a symbol, we return -2
         if (count < 9) {
             if (board[x][y] == '-') {
                 board[x][y] = symbol;
@@ -67,14 +70,17 @@ class Board {
     }
 
     boolean checkWin(char symbol) {
+        //we are traversing each row and checking for 3 consecutive symbols
         for (int i = 0; i < 3; i++)
             if (board[i][0] == symbol && board[i][1] == symbol && board[i][2] == symbol)
                 return true;
 
+        //we are traversing each column and checking for 3 consecutive symbols
         for (int j = 0; j < 3; j++)
             if (board[0][j] == symbol && board[1][j] == symbol && board[2][j] == symbol)
                 return true;
 
+        //here we are traversing both the diagonals of the board
         if (board[0][0] == symbol && board[1][1] == symbol && board[2][2] == symbol)
             return true;
         if (board[0][2] == symbol && board[1][1] == symbol && board[2][0] == symbol)
